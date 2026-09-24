@@ -469,18 +469,35 @@ refuted target is published as a finding, not hidden.*
   CA uses simplex-type reflection and line extrapolation, which are different direct-search
   families. This is flagged for reviewer scrutiny rather than assumed uncontroversial.
 - **Prior art.** The authoritative, mechanism-by-mechanism review is
-  `specs/001-football-algorithm/related-work.md` (search date 2026-09-24). It covers twelve
-  football/soccer-specific optimizers, the League Championship Algorithm, and the wider sports family,
-  with Crossref-verified references. Its headline conclusion: no football-inspired method found
-  treats the formation as a controlled interaction topology, carries a ball distinct from the
-  incumbent under threshold acceptance, or has any counterpart to the VAR rollback audit or the
-  moving offside ε-line. There are real partial overlaps that the manuscript MUST address
-  explicitly: the Tiki-taka Algorithm on the ball, the Soccer Match Algorithm on the adaptive
-  manager, the Modernized Tiki-taka Algorithm and the Football Team Training Algorithm on
-  role heterogeneity and rotation, SLOCA on fatigue and substitutes, and FbOA on long passes. Novelty
-  is therefore claimed for the structural composition and tested by ablation, not for any football
-  concept. The full texts of SMA, TTA, FbOA and SLOCA MUST be read before submission (see that
-  file's Verification notes).
+  `specs/001-football-algorithm/related-work.md` (2026-09-24). It covers thirteen
+  football/soccer-specific optimizers (2012–2026), the League Championship Algorithm, and the wider
+  sports family, with Crossref-verified references. The full texts of SMA, TTA, FbOA, FGA, MTTA, FTTA,
+  IFTTA and the Alatas survey have been read.
+  - *Headline conclusion (unchanged by the full-text pass).* No football-inspired method found makes
+    the *shape* of an interaction lattice a controlled variable, carries a single search-space focal
+    point distinct from the incumbent under threshold acceptance, or has a counterpart to the VAR
+    audit or the moving offside ε-line.
+  - *The SMA question is resolved in TFO's favour.* The panel had flagged a risk that the Soccer Match
+    Algorithm's "compositions" rewire interaction. They do not: they are role counts over one
+    solution's decision variables, fixed at 4-4-2.
+  - *Wording that MUST stay narrow.* TTA passes along a fixed index ring, and FTTA re-clusters every
+    iteration. The formation claim therefore MUST stay about a *controlled shape* tied to takeover
+    time, not about restricting or varying who interacts with whom.
+  - *Partial overlaps the manuscript MUST address explicitly.*
+    - The Tiki-taka Algorithm on the ball (one unevaluated ball per player, ring passes, random loss)
+      and on formation (the ring).
+    - SMA on the adaptive manager (per-operator credit assignment), on possession and turnovers (a
+      fitness-contingent token that relocates nothing), and weakly on VAR (it reverts to the best).
+    - MTTA and FTTA on role heterogeneity and rotation. MTTA also adapts a feedback step size and
+      already uses the name *regista*.
+    - FTTA and IFTTA on the Finisher (Cauchy mutation of the incumbent) and on substitutions
+      (stagnation restarts).
+    - The Football Game Algorithm's coach memory on the Sweeper-Keeper and on substitutions.
+    - SLOCA on fatigue and substitutes.
+    - FbOA and FOA (2012), which share the long name "Football Optimization Algorithm".
+  - *Consequence.* Novelty is claimed for the structural composition and tested by ablation, not for
+    any football concept. SLOCA's full text MUST still be read before submission (see that file's
+    Verification notes).
 - **Scope.** No real-world application case study is designed or planned. The engineering design
   problems are benchmarks.
 - **Pre-registered hypotheses** (committed now, verdicts reported later): **H1**: TFO is the best of the
