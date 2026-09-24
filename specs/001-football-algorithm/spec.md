@@ -468,23 +468,19 @@ refuted target is published as a finding, not hidden.*
 - **Overlap classification.** The Virtuoso's compass search is counted as a family absent from CA:
   CA uses simplex-type reflection and line extrapolation, which are different direct-search
   families. This is flagged for reviewer scrutiny rather than assumed uncontroversial.
-- **Prior art to verify during the literature review.** Sport- and league-inspired metaheuristics to
-  cite and distinguish from include, at minimum: League Championship Algorithm, Soccer League
-  Competition, Football Game Based Optimization, World Cup Optimization, Football Optimization
-  Algorithm (FbOA, El-kenawy et al., 2024), Football Team Training Algorithm (FTTA, *Expert Systems
-  with Applications*, 2024), Tiki-taka Algorithm (TTA, 2020), Modernized Tiki-taka Algorithm (MTTA,
-  2026), and Soccer Match Algorithm (SMA, 2024). Exact references are to be verified before
-  citation. The **between-teams-vs-one-squad distinction no longer holds as the primary claim**:
-  several of these (FbOA, FTTA, TTA, MTTA, SMA) already model tactics or role specialization
-  *within* one team, so that framing alone would not survive review. TFO's positioning instead
-  rests on the specific structural mechanisms named in `mechanism-map.md`'s distinctiveness pitch —
-  a formation shape that is itself a dynamic interaction topology (not a fixed neighbourhood or
-  role list), agents that swap roles under that shape rather than being permanently typed, a focal
-  point (the ball) carried by threshold-accepted passes rather than every agent chasing the
-  incumbent directly, and mechanisms with no counterpart in any of the above (the deferred VAR
-  audit with rollback; the moving offside ε-line). The manuscript MUST check each of these prior
-  methods individually against that mechanism list, not merely assert novelty from the team/squad
-  framing.
+- **Prior art.** The authoritative, mechanism-by-mechanism review is
+  `specs/001-football-algorithm/related-work.md` (search date 2026-09-24). It covers twelve
+  football/soccer-specific optimizers, the League Championship Algorithm, and the wider sports family,
+  with Crossref-verified references. Its headline conclusion: no football-inspired method found
+  treats the formation as a controlled interaction topology, carries a ball distinct from the
+  incumbent under threshold acceptance, or has any counterpart to the VAR rollback audit or the
+  moving offside ε-line. There are real partial overlaps that the manuscript MUST address
+  explicitly: the Tiki-taka Algorithm on the ball, the Soccer Match Algorithm on the adaptive
+  manager, the Modernized Tiki-taka Algorithm and the Football Team Training Algorithm on
+  role heterogeneity and rotation, SLOCA on fatigue and substitutes, and FbOA on long passes. Novelty
+  is therefore claimed for the structural composition and tested by ablation, not for any football
+  concept. The full texts of SMA, TTA, FbOA and SLOCA MUST be read before submission (see that
+  file's Verification notes).
 - **Scope.** No real-world application case study is designed or planned. The engineering design
   problems are benchmarks.
 - **Pre-registered hypotheses** (committed now, verdicts reported later): **H1**: TFO is the best of the
