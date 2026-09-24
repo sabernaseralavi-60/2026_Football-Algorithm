@@ -201,7 +201,7 @@ that matter, the settings that can be left at their defaults, and the direction 
   lines × lanes pitch lattice, and each agent carries exactly one archetype.
 - **FR-002**: Each outfield agent MUST interact (select partners, donors, or neighbourhood bests)
   only with its von Neumann neighbours on the current formation lattice. The only exceptions are
-  those declared in FR-008 (Regista long-range link), FR-015 (pressing), and FR-017 (set pieces
+  those declared in FR-008 (Deep-Lying Playmaker long-range link), FR-015 (pressing), and FR-017 (set pieces
   acting on the incumbent).
 - **FR-003**: TFO MUST maintain a *ball*, a focal point distinct from the best-so-far solution,
   which the possession, pressing, counter-attack, and Finisher mechanisms act on.
@@ -220,7 +220,7 @@ a documented neutral move)
   jointly stratify the box.
 - **FR-007 Overlapping Wing-Back**: MUST, at a set jumping rate, evaluate the quasi-opposite of its
   position about the squad centroid and keep the better of the two.
-- **FR-008 Regista**: MUST recombine with a partner chosen at maximal (or near-maximal) graph
+- **FR-008 Deep-Lying Playmaker**: MUST recombine with a partner chosen at maximal (or near-maximal) graph
   distance on the formation, using a blend crossover whose extent is set by a single parameter.
 - **FR-009 Box-to-Box Engine**: MUST move by a differential step built from its neighbourhood best
   and a difference vector between a defensive-line and an attacking-line member of its
@@ -489,7 +489,8 @@ refuted target is published as a finding, not hidden.*
     - SMA on the adaptive manager (per-operator credit assignment), on possession and turnovers (a
       fitness-contingent token that relocates nothing), and weakly on VAR (it reverts to the best).
     - MTTA and FTTA on role heterogeneity and rotation. MTTA also adapts a feedback step size and
-      already uses the name *regista*.
+      already uses the name *regista*, so TFO's long-range archetype is named the Deep-Lying
+      Playmaker instead (see `mechanism-map.md`).
     - FTTA and IFTTA on the Finisher (Cauchy mutation of the incumbent) and on substitutions
       (stagnation restarts).
     - The Football Game Algorithm's coach memory on the Sweeper-Keeper and on substitutions.

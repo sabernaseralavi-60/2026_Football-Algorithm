@@ -7,7 +7,11 @@ but it is not used as the formal name, because the acronym "FA" already belongs 
 Algorithm, one of the most-cited metaheuristics in the field, and would be ambiguous in every
 results table. *Total football* is a tactical doctrine, not a person: outfield players swap
 positions freely while the team keeps its shape. That is what TFO does. Agents keep a formation (an
-interaction graph) while roles, focus and shape all shift underneath it.
+interaction graph) while roles, focus and shape all shift underneath it. The long-range
+recombination archetype is called the **Deep-Lying Playmaker**, not the *Regista*. The Modernized
+Tiki-taka Algorithm (MTTA; Song & Zhao, 2026), a direct baseline, already uses "regista" and "long
+cross-field pass" for a different mechanism, a success-based step-size factor. Reusing the word
+would put two unrelated operators under one label in the same comparison tables.
 
 **Why this is not a chess reskin.** CA arranges heterogeneous pieces around one incumbent. Every
 piece relates to the whole population through the King, so its interaction structure is
@@ -35,7 +39,7 @@ families that do not appear in CA's operator-family table (see the overlap audit
 | Zonal Centre-Back | Explores only inside its assigned stratum of a partition of the search box; zones are redrawn at every fixture boundary, so no region is left unmarked | Stratified / Latin-hypercube sampling, space partitioning (McKay et al. 1979) |
 | Overlapping Wing-Back | "Switches the play": evaluates the quasi-opposite of its position about the squad centroid and keeps the better of the two | Quasi-opposition-based learning, generation jumping (Tizhoosh 2005; Rahnamayan et al. 2007) |
 | Destroyer (ball-winning midfielder) | Contests duels: when two agents fall inside a niche radius, the worse one is dispossessed and relocated out of the niche by a differential kick | Clearing / crowding-based niching (Pétrowski 1996; Mahfoud 1995) |
-| Regista (deep-lying playmaker) | Long diagonal pass: recombines with a partner at maximal graph distance in the formation, bypassing local topology. *Prior art (full text):* in the football family a "long pass" always means a long *step*. In FbOA it appears in prose only, with no equation (related-work §2.12). In MTTA it is the step enlarged by the adaptive factor, and MTTA already calls that midfielder mechanism the "regista" (related-work §2.10). TFO's "long" is graph distance to a recombination partner, so the name needs a citation or a rename | BLX-α crossover over small-world long-range links (Eshelman & Schaffer 1993; Watts & Strogatz 1998) |
+| Deep-Lying Playmaker | Long diagonal pass: recombines with a partner at maximal graph distance in the formation, bypassing local topology. *Prior art (full text):* in the football family a "long pass" always means a long *step*. In FbOA it appears in prose only, with no equation (related-work §2.12). In MTTA it is the step enlarged by the adaptive factor, and MTTA calls that midfielder mechanism the "regista" (related-work §2.10). TFO's "long" is graph distance to a recombination partner. This archetype was therefore renamed from "Regista" (see the naming note above) | BLX-α crossover over small-world long-range links (Eshelman & Schaffer 1993; Watts & Strogatz 1998) |
 | Box-to-Box Engine | Links defence and attack: a differential move built from its neighbourhood best plus a defender-minus-forward difference vector | Neighbourhood-based differential mutation, DEGL-style local DE (Das et al. 2009) |
 | Virtuoso (close-control dribbler) | Beats defenders one at a time: polls tiny ± steps along a few coordinates, takes the first improvement, and expands the mesh on success or contracts it on failure | Compass / generalized pattern search (Hooke & Jeeves 1961; Torczon 1997) |
 | Finisher (explosive centre-forward) | Mostly quiet, occasionally explosive: heavy-tailed jumps around the ball; after repeated misses it restarts from a different Sweeper-Keeper archive elite. *Prior art (full text):* FTTA and IFTTA already mutate the *incumbent* with a Cauchy term whose weight decays as 1/k (related-work §2.11). The Finisher's jumps are centred on the ball, keep their heavy tail, and end in an elite restart | Lévy-flight (heavy-tailed) mutation with elite restart (Lee & Yao 2004; Mantegna 1994) |
@@ -56,8 +60,8 @@ families that do not appear in CA's operator-family table (see the overlap audit
 modern ball-playing goalkeepers who start attacks from the back. The Zonal Centre-Back follows
 commanding defenders who organise a zonal line. The Overlapping Wing-Back follows attacking
 full-backs who overlap and switch play to the far flank. The Destroyer follows ball-winning
-defensive midfielders who break up play in congested areas. The Regista follows deep-lying
-playmakers who dictate tempo with long diagonal passes. The Box-to-Box Engine follows tireless
+defensive midfielders who break up play in congested areas. The Deep-Lying Playmaker follows
+deep-lying playmakers who dictate tempo with long diagonal passes. The Box-to-Box Engine follows tireless
 midfielders who cover both penalty areas. The Virtuoso follows low-centre-of-gravity dribblers who
 beat opponents with many tiny touches. The Finisher follows powerful centre-forwards whose quiet
 spells end in sudden, spectacular strikes.
@@ -74,4 +78,4 @@ spells end in sudden, spectacular strikes.
 | Substitutions | Yes (threefold repetition, re-initialisation) | Triggered by individual stagnation plus fatigue, capped per fixture, feeds the VAR tabu register |
 | Fatigue | Yes (development schedule, decaying step) | Per-agent, workload-clocked rather than global and iteration-clocked |
 | Manager's tactical board | Yes (phase state machine) | Also switches interaction topology (formation), not only operator rates |
-| Zonal Centre-Back, Destroyer, Regista, Virtuoso, Finisher, Formation, Possession, Counter-attack, Set pieces, Offside line, VAR | No | 11 mechanisms in families absent from CA's operator-family table |
+| Zonal Centre-Back, Destroyer, Deep-Lying Playmaker, Virtuoso, Finisher, Formation, Possession, Counter-attack, Set pieces, Offside line, VAR | No | 11 mechanisms in families absent from CA's operator-family table |

@@ -24,8 +24,8 @@ Citation counts are a snapshot taken on 2026-09-24. **Crossref** means Crossref'
 were seen.
 
 **Mechanism labels used below.** They refer to `mechanism-map.md`. Archetypes: SK Sweeper-Keeper, ZCB Zonal
-Centre-Back, OWB Overlapping Wing-Back, DES Destroyer, REG Regista, B2B Box-to-Box Engine, VIR Virtuoso, FIN
-Finisher. Team-level tactics: FORM formation-as-topology, ROT positional rotation, BALL ball and possession,
+Centre-Back, OWB Overlapping Wing-Back, DES Destroyer, DLP Deep-Lying Playmaker (formerly "Regista"; see §2.10),
+B2B Box-to-Box Engine, VIR Virtuoso, FIN Finisher. Team-level tactics: FORM formation-as-topology, ROT positional rotation, BALL ball and possession,
 PRESS pressing, CTR counter-attack, SET set pieces, OFF offside line, SUB substitutions, FAT fatigue, VAR VAR
 review, MGR the manager's state machine.
 
@@ -238,7 +238,7 @@ an explicit overlap breakdown against TFO's 19 mechanisms.
   - B2B/FORM: partial. SGOLS's "nearby players" is a local neighbourhood. No SGOLS full text was available,
     so whether "nearby" is index-based or Euclidean is still unverified.
 - **No counterpart in SGO.** FORM as a controllable topology, ROT, PRESS, CTR, SET, OFF, VAR, FAT, MGR, and
-  ZCB/OWB/DES/REG/VIR/FIN.
+  ZCB/OWB/DES/DLP/VIR/FIN.
 - **Verdict:** partial overlap (BALL at the metaphor level, SK), distinct on structure.
 
 ### 2.8 Football Game Algorithm / Football Game Inspired Algorithm (FGA / FGO) — full text read
@@ -291,7 +291,7 @@ an explicit overlap breakdown against TFO's 19 mechanisms.
     the opposite way from TFO's pressing: agents *outside* a radius around the best are sent to an archived
     elite, whereas TFO's pressing makes agents *inside* ρ of the ball close it down.
 - **No counterpart in FGA.** FORM (attraction to the ball-holder is global), ROT, CTR, SET, OFF, VAR, FAT, and
-  the ZCB, OWB, DES, REG, B2B and VIR archetype families.
+  the ZCB, OWB, DES, DLP, B2B and VIR archetype families.
 - **Verdict:** partial overlap (SK, FIN and SUB through the coach memory; BALL at the metaphor level only).
   **Distinct on MGR**, which reverses pass 1.
 
@@ -406,14 +406,16 @@ an explicit overlap breakdown against TFO's 19 mechanisms.
   - MGR: partial (new). MTTA's CF is feedback-driven step-size control on a single scalar. It is
     success-based, in the spirit of Rechenberg's 1/5 rule. TFO's manager is a multi-signal state machine that
     also switches the topology.
-  - REG: **naming collision (new).** MTTA already uses "regista" and "long cross-field pass" for large-step
-    exploration. TFO's Regista is a recombination with a partner at maximum *graph* distance (BLX-α), which is
-    a different operator. The manuscript must either cite MTTA's use of the term or rename the archetype.
+  - DLP: **naming collision, resolved by renaming.** MTTA already uses "regista" and "long cross-field pass"
+    for large-step exploration. TFO's archetype is a recombination with a partner at maximum *graph* distance
+    (BLX-α), which is a different operator. Because MTTA is a direct baseline, TFO renamed its archetype from
+    "Regista" to **Deep-Lying Playmaker** (`mechanism-map.md`, naming note). The manuscript still cites MTTA's
+    "long cross-field pass" as prior use of the long-pass metaphor in the DLP row.
   - PRESS: metaphor only. MTTA's defender prose invokes "high-pressing" (p. 13), but the mechanism is
     centroid-plus-elite attraction, not distance-gated membership.
   - BALL: inherited from TTA (n balls, index ring, random loss; §2.9).
 - **No counterpart in MTTA.** FORM, PRESS as a mechanism, CTR, SET, OFF, VAR, FAT, SUB.
-- **Verdict:** partial overlap (ROT; MGR as scalar step-size control; the REG name; weak on archetypes);
+- **Verdict:** partial overlap (ROT; MGR as scalar step-size control; the *regista* name, now avoided; weak on archetypes);
   distinct on structure.
 
 ### 2.11 Football Team Training Algorithm (FTTA) and variants — full text read (FTTA, IFTTA)
@@ -547,7 +549,7 @@ an explicit overlap breakdown against TFO's 19 mechanisms.
   - *Is there a positional-adjustment rule?* **No dedicated rule exists.** The published mechanism is too
     under-specified to reimplement from the paper.
 - **Overlap with TFO.**
-  - REG: metaphor only. TFO's "long" is graph distance on the formation lattice (BLX-α with the partner at
+  - DLP: metaphor only. TFO's "long" is graph distance on the formation lattice (BLX-α with the partner at
     maximum graph distance), not step length.
   - BALL: none. FbOA has no ball state and no pass partner.
 - **No counterpart in FbOA.** Everything at the mechanism level.
@@ -650,7 +652,7 @@ an explicit overlap breakdown against TFO's 19 mechanisms.
   - *Methodological note.* Eq. 4 makes the run radius proportional to |X_A|, so steps vanish near the
     coordinate origin. That is an origin-centred bias to remember if SMA is ever run on unshifted functions.
     The benchmark is 13 classic functions at n = 10, 25 and 50 with a 5,000-FE cap (§IV.B).
-- **No counterpart in SMA.** FORM, PRESS, SET, OFF, FAT, and the ZCB, OWB, DES, REG, B2B, VIR and FIN families.
+- **No counterpart in SMA.** FORM, PRESS, SET, OFF, FAT, and the ZCB, OWB, DES, DLP, B2B, VIR and FIN families.
 - **Verdict:** **distinct on FORM (resolved).** Partial on MGR (a different family: adaptive operator
   selection versus a state machine). Partial on BALL/CTR (a fitness-contingent possession token). Weak on VAR.
   The novelty paragraph must cite SMA for adaptive control, for fitness-contingent possession and for
@@ -738,9 +740,9 @@ description (Alatas or a variant paper), **Abs** is the abstract only, and **Sni
 | SGO (+SGOLS) | 2013/2015 (2020) | Abs + Sec | Ball dribbler = best-so-far. Move forward/move off. Substitute elite pool. Nearby-player info | BALL (but ball = incumbent), SK, B2B (local info, definition unverified) | **Partial overlap** |
 | FGA | 2016 | **FT** | Random walk + pull toward a fitness-biased ball-holder. Coach memory with decaying distance/fitness thresholds that relocate agents near elites | SK, FIN, SUB (coach memory); BALL (metaphor); PRESS (weak) | **Partial overlap**. MGR overlap withdrawn |
 | **TTA** | 2020/2021 | **FT** | n balls (one per player) passed along a fixed index ring, random loss (p = 0.1–0.3), pull toward own ball + random top-10 % elite | **BALL** (closest prior art), FORM (fixed ring) | **Closest prior art on BALL; partial on FORM.** Defensible on acceptance rule, controlled 2-D lattice, single ball, event turnovers |
-| MTTA | 2026 | **FT** | TTA + per-iteration fitness-ranked forward/midfielder/defender variants of one attraction family; success-based step factor ("regista") | ROT, MGR (scalar), REG (name), archetypes (weak), BALL (via TTA) | **Partial overlap**. Distinct on structure |
+| MTTA | 2026 | **FT** | TTA + per-iteration fitness-ranked forward/midfielder/defender variants of one attraction family; success-based step factor ("regista") | ROT, MGR (scalar), DLP (name clash, resolved by renaming), archetypes (weak), BALL (via TTA) | **Partial overlap**. Distinct on structure |
 | FTTA (+IFTTA, MIFTTA) | 2024 (2024, 2025) | **FT** (FTTA, IFTTA); Abs (MIFTTA) | Random per-iteration behaviour types (3 of 4 best-guided), GMM clusters recomputed every iteration, Gauss–Cauchy mutation of the best; IFTTA adds stagnation restarts | Archetypes, FORM/B2B (clusters), FIN (Cauchy), SET (different family), SUB (IFTTA PRS) | **Partial overlap**. Distinct on structure |
-| FbOA | 2024 | **FT** | Short/lob/through-ball passes in prose only; under-specified velocity, exploitation and mutation formulas | REG (metaphor only) | **Distinct at mechanism level** (not reimplementable) |
+| FbOA | 2024 | **FT** | Short/lob/through-ball passes in prose only; under-specified velocity, exploitation and mutation formulas | DLP (metaphor only) | **Distinct at mechanism level** (not reimplementable) |
 | **SMA** | 2024 | **FT** | Two solutions; players = decision variables; role counts (4-4-2); per-operator credit-assignment adaptation; fitness-contingent possession; revert to best after shots | **MGR** (different family), BALL/CTR (possession token), VAR (weak) | **FORM resolved: distinct.** Partial on MGR, BALL/CTR |
 | SSO | 2024 | Abs | Spectator influence on players | none | **Distinct** |
 
@@ -771,7 +773,7 @@ Partial overlaps exist for the following. Each needs a stated, mechanism-level d
   relocation), Golden Ball (stagnation exchange); SMA in vocabulary only.
 - **FAT:** SLOCA (unverified).
 - **MGR:** SMA (per-operator credit assignment), MTTA (success-based step-size factor).
-- **REG:** MTTA (uses the name "regista"; long pass = large step), FbOA (prose only).
+- **DLP:** MTTA (uses the name "regista"; long pass = large step), FbOA (prose only).
 - **SK:** SGO (substitute elite pool), FGA (coach memory), TTA (key-player archive).
 - **FIN:** FTTA and IFTTA (Cauchy mutation of the incumbent), FGA (relocation around the nearest elite).
 - **CTR:** SMA (outcome-triggered turnover without relocation), BTOA (basketball "fast break", outside the
@@ -846,8 +848,8 @@ The other changes relative to the pass-1 statement:
 - Cite SMA in the manager, possession/counter-attack and VAR discussions.
 - Cite FTTA in the formation row (clusters) and the Finisher row (Cauchy mutation), and IFTTA in the
   substitution row.
-- Cite MTTA in the rotation and manager rows, and either acknowledge MTTA's prior use of *regista* or rename
-  TFO's archetype.
+- Cite MTTA in the rotation, manager and Deep-Lying Playmaker rows. The *regista* clash is resolved: TFO's
+  archetype was renamed from "Regista" to Deep-Lying Playmaker (§2.10).
 - Cite FGA in the Sweeper-Keeper and substitution rows.
 - Footnote FOA vs FbOA.
 
@@ -902,7 +904,8 @@ submission. SGOLS's "nearby" definition and FOA's primary text are lower-risk ch
     - "SMA" is also the Slime Mould Algorithm (Li et al., 2020), a far more widely used metaheuristic.
     - "FOA" (Hatamzadeh & Khayyambashi, 2012) and "FbOA" (El-Kenawy et al., 2024) have the **same** long name,
       "Football Optimization Algorithm", and "FOA" is also the Fruit Fly Optimization Algorithm.
-    - MTTA already uses **"regista"** for a different mechanism (§2.10).
+    - MTTA already uses **"regista"** for a different mechanism (§2.10), so TFO's archetype is named the
+      Deep-Lying Playmaker instead.
 12. **Search budget.** The Consensus monthly quota was exhausted during pass 1 (it resets 2026-10-01). A
     follow-up sweep for 2026 football variants published after mid-2026 is advisable closer to submission.
 13. **Reviews to cite for the landscape:** Alatas (2019), doi:10.1007/s10462-017-9587-x (Crossref 39;
