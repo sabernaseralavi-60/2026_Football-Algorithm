@@ -431,8 +431,18 @@ refuted target is published as a finding, not hidden.*
 
 - **Name.** The formal name is *Total Football Optimizer (TFO)*, and the ablation twin is *TFO-static*.
   The working title "The Football Algorithm (FA)" was set aside because "FA" is the established
-  acronym of the Firefly Algorithm and would be ambiguous in results tables. "The Football
-  Algorithm" can remain the informal series name alongside the Chess Algorithm.
+  acronym of the Firefly Algorithm (Yang, 2009; ~4,100 citations) — confirmed, not assumed — and
+  would be ambiguous in results tables. A plain "Football Optimizer (TO)" was considered and
+  rejected: "TO" is Topology Optimization's acronym in the same engineering-design-benchmark field
+  this paper uses, clashes with Tornado Optimizer (TOC, 2025) and Teamwork Optimization Algorithm
+  (TOA), and the full name nearly duplicates the existing Football Optimization Algorithm (FbOA,
+  El-kenawy et al., 2024) — see the prior-art bullet below. "TFO" itself is not perfectly clean:
+  three low-citation, unrelated methods share the string (Twin Fang Optimization, 2025; Tactical
+  Flight Optimizer, 2025; Tapeworm Foraging Optimization, 2026) but none is a plausible baseline or
+  comparison method. The manuscript MUST spell out "Total Football Optimizer (TFO)" in full at
+  first use and MAY note the minor collisions in a footnote; this is a lower bar than clashing with
+  an 86+-citation method in the same field. "The Football Algorithm" can remain the informal series
+  name alongside the Chess Algorithm.
 - **Budget.** The evaluation budget is matched across algorithms, not iterations (a deliberate
   tightening relative to CA's iteration-matched protocol). The default is the suite's official
   maximum (10,000 × D evaluations for CEC suites). If compute limits force a reduction, one reduced
@@ -458,12 +468,23 @@ refuted target is published as a finding, not hidden.*
 - **Overlap classification.** The Virtuoso's compass search is counted as a family absent from CA:
   CA uses simplex-type reflection and line extrapolation, which are different direct-search
   families. This is flagged for reviewer scrutiny rather than assumed uncontroversial.
-- **Prior art to verify during the literature review.** Sport- and league-inspired metaheuristics
-  include the League Championship Algorithm, Soccer League Competition, Football Game Based
-  Optimization, and World Cup Optimization. Their exact references are to be verified before
-  citation. TFO's positioning is that these model competition *between* teams as a population
-  partition and a selection scheme, whereas TFO models the in-match tactics of *one* squad: an
-  interaction topology, a focal-point trajectory, event-driven transitions, and deferred audit.
+- **Prior art to verify during the literature review.** Sport- and league-inspired metaheuristics to
+  cite and distinguish from include, at minimum: League Championship Algorithm, Soccer League
+  Competition, Football Game Based Optimization, World Cup Optimization, Football Optimization
+  Algorithm (FbOA, El-kenawy et al., 2024), Football Team Training Algorithm (FTTA, *Expert Systems
+  with Applications*, 2024), Tiki-taka Algorithm (TTA, 2020), Modernized Tiki-taka Algorithm (MTTA,
+  2026), and Soccer Match Algorithm (SMA, 2024). Exact references are to be verified before
+  citation. The **between-teams-vs-one-squad distinction no longer holds as the primary claim**:
+  several of these (FbOA, FTTA, TTA, MTTA, SMA) already model tactics or role specialization
+  *within* one team, so that framing alone would not survive review. TFO's positioning instead
+  rests on the specific structural mechanisms named in `mechanism-map.md`'s distinctiveness pitch —
+  a formation shape that is itself a dynamic interaction topology (not a fixed neighbourhood or
+  role list), agents that swap roles under that shape rather than being permanently typed, a focal
+  point (the ball) carried by threshold-accepted passes rather than every agent chasing the
+  incumbent directly, and mechanisms with no counterpart in any of the above (the deferred VAR
+  audit with rollback; the moving offside ε-line). The manuscript MUST check each of these prior
+  methods individually against that mechanism list, not merely assert novelty from the team/squad
+  framing.
 - **Scope.** No real-world application case study is designed or planned. The engineering design
   problems are benchmarks.
 - **Pre-registered hypotheses** (committed now, verdicts reported later): **H1**: TFO is the best of the
