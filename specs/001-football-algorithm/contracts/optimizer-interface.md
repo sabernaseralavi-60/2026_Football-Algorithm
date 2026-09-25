@@ -84,7 +84,7 @@ adapters.
 | `GAAdapter`, `PSOAdapter`, `GWOAdapter` | vendored `genetic_algorithm`, `particle_swarm`, `grey_wolf` | `iters` computed from each routine's evaluation pattern (initial evaluations plus per-iteration evaluations) so that its schedule ends at B; ledger stop |
 | `WOAAdapter` | `mealpy.WOA.OriginalWOA(epoch=B//30 − 1, pop_size=30).solve(..., termination={"max_fe": B}, seed=seed)` | mealpy's own cap overshoots (measured), so the ledger stop is the binding one |
 | `LSHADEAdapter` | `niapy` L-SHADE, `population_size=18·D`, `Task(max_evals=B)` | Linear population reduction uses the true B |
-| `CMAESAdapter` | `cma.fmin2(None, x0, 0.3, {"bounds": [0, 1], "maxfevals": B, "seed": seed, "verbose": -9}, parallel_objective=view, restarts=9, incpopsize=2)` | `x0` is drawn from `default_rng(seed)`; ledger stop |
+| `CMAESAdapter` | `cma.fmin2(None, x0, 0.3, {"bounds": [0, 1], "maxfevals": B, "seed": seed, "verbose": -9}, parallel_objective=view, restarts=20, incpopsize=2)` | `x0` is a callable that draws a fresh uniform point in [0, 1]^D from `default_rng(seed)`, so every restart starts from a new point (research.md R8); `restarts=20` cannot bind before B, so the budget ends every run; ledger stop. Results come from the ledger, never from `fmin2`'s return value, which holds only the last restart's best |
 
 **Pinned versions** (research.md R8): mealpy 3.0.3 (installed `--no-deps`), niapy 2.7.1, cma 4.5.0.
 The vendored CA file is pinned by SHA-256 in `vendor/PROVENANCE.md`.

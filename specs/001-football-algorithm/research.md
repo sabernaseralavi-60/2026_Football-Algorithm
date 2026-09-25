@@ -141,11 +141,17 @@ used:
     schedule and to CMA-ES's restart logic.
   - The final budgets are part of the frozen configuration (gate G3).
 - **Rationale.**
-  - **Spec discrepancy, flagged for the owner.** The spec's Assumptions say "the suite's official
-    maximum (10,000 × D evaluations for CEC suites)". The parenthesis is correct for CEC-2017 but not
-    for CEC-2022, whose report sets 200,000 at D = 10 and 1,000,000 at D = 20. This plan follows the
-    operative rule, "official maximum". The CEC-2022 figures must be checked against the technical
-    report PDF during implementation, before `protocol.toml` is committed.
+  - **Spec discrepancy, resolved (2026-09-25).** The spec's Assumptions used to say "the suite's
+    official maximum (10,000 × D evaluations for CEC suites)". That parenthesis held for CEC-2017
+    only, and the spec now states each suite's own rule. Both figures were checked against the
+    primary PDFs in the organisers' repositories (github.com/P-N-Suganthan):
+    - CEC-2017 (`CEC2017-BoundContrained`, "Definitions of CEC2017 benchmark suite final version
+      updated.pdf", modified 15 October 2016, §2.1): "MaxFES: 10000*D (Max_FES for 10D = 100000;
+      for 30D = 300000; for 50D = 500000; for 100D = 1000000)", with 51 runs per problem.
+    - CEC-2022 (`2022-SO-BO`, "CEC2022 TR.pdf", Kumar, Price, Mohamed, Hadi & Suganthan, December
+      2021, §2.1): a MaxFES table giving D = 10 → 200,000 and D = 20 → 1,000,000, with 30 runs per
+      problem. These are fixed values per dimension, not a multiple of D. Some secondary sources
+      misquote them as "2×10⁵×D" and "10⁶×D"; the primary table does not.
   - Order-of-magnitude projection:
     - The main runs total about 6.3 × 10⁹ evaluations: CEC-2017 about 2.35 × 10⁹, CEC-2022 about
       3.9 × 10⁹, engineering negligible.
@@ -219,7 +225,7 @@ used:
 | GA, PSO, GWO | Sibling `algorithms.py` (`genetic_algorithm`, `particle_swarm`, `grey_wolf`), **vendored** (R9) | 30 | `iters` derived from the budget and each routine's known evaluation pattern, so that internal schedules (PSO inertia, GWO's *a*) finish exactly at the budget. The ledger stops them exactly. |
 | WOA | `mealpy==3.0.3`, `WOA.OriginalWOA` (the sibling's source) | 30 | `epoch = B // 30 − 1`, `termination = {"max_fe": B}`, ledger hard stop |
 | L-SHADE | `niapy==2.7.1`, `LpsrSuccessHistoryAdaptiveDifferentialEvolution` (the sibling's source; `pyade` is gone from GitHub) | N_init = 18·D (niapy's default of 540 at D = 30 matches Tanabe & Fukunaga 2014), H = 6, p = 0.11, r_arc = 2.6 | `Task(max_evals=B)`. The linear population reduction is driven by the true budget B. |
-| CMA-ES | `cma==4.5.0` (pycma, the reference implementation), used as **IPOP-CMA-ES** (Auger & Hansen 2005) through `cma.fmin2(..., restarts=9, incpopsize=2, parallel_objective=...)` | λ = 4 + ⌊3 ln D⌋ at the start, doubling on each restart | `maxfevals = B`, bounds [0, 1], σ₀ = 0.3, ledger hard stop |
+| CMA-ES | `cma==4.5.0` (pycma, the reference implementation), used as **IPOP-CMA-ES** (Auger & Hansen 2005) through `cma.fmin2(x0_callable, 0.3, ..., restarts=20, incpopsize=2, parallel_objective=...)` | λ = 4 + ⌊3 ln D⌋ at the start, doubling on each restart | `maxfevals = B`, bounds [0, 1], σ₀ = 0.3, fresh uniform x0 per restart, ledger hard stop |
 
 - **Rationale.**
   - Reusing the sibling's GA, PSO and GWO code keeps the baseline identical across the two papers.
@@ -229,15 +235,48 @@ used:
     authors implemented their own baselines, at least for the strongest rivals.
   - L-SHADE and CMA-ES use their own recommended population rules, as the spec's Assumptions
     require. The sibling instead ran L-SHADE from an initial population of 30.
-  - **CMA-ES with restarts (IPOP).** At 300,000 to 1,000,000 evaluations, a single CMA-ES run with
+  - **CMA-ES with restarts (IPOP).** At 200,000 to 1,000,000 evaluations, a single CMA-ES run with
     its stopping criteria disabled (the sibling's setup, which suited 15,000 evaluations) converges
     and then idles away most of the budget. IPOP is how CMA-ES is normally deployed at CEC budgets.
     Principle III requires the strongest representative of each family. The choice works against
     TFO, not for it, since H4 expects TFO to lose. Tables label it "CMA-ES (IPOP)".
+  - **Decision confirmed (2026-09-25): keep IPOP-CMA-ES as the only CMA-ES in the roster.**
+    - *(a) Standard and well cited.* Auger & Hansen (2005) is verified on Crossref (IEEE CEC 2005,
+      vol. 2, pp. 1769–1776, doi:10.1109/CEC.2005.1554902; 610 citing works). pycma implements it
+      natively: its `fmin2` documentation says "An IPOP-CMA-ES restart is invoked if
+      `restarts > 0`", with `incpopsize=2` as the default population multiplier.
+    - *(b) No inconsistency inside this paper.* CA is re-run here from the vendored code (R9) under
+      this paper's protocol, so CA and TFO face the same IPOP-CMA-ES at the same budgets and seeds.
+      The only thing that changes is cross-paper comparability. The sibling ran plain CMA-ES
+      (`sota_algorithms.run_cmaes`: population 30, every stopping criterion disabled, σ₀ = 0.3·range)
+      at 15,000 evaluations. CA's published standing against "CMA-ES" therefore cannot be read
+      against CA's standing against "CMA-ES (IPOP)" here. The manuscript MUST footnote this at the
+      first results table: the variant, the budget and the population rule all differ, and CA's
+      numbers in this paper are this paper's re-runs, not quotations from the CA paper.
+    - *(c) No test-suite tuning.* Every setting is fixed a priori from pycma's documentation or
+      sibling parity, never from test-suite results. λ₀ is pycma's default. `incpopsize=2` is the
+      default and Auger & Hansen's factor. σ₀ = 0.3 on the unit box matches the sibling and pycma's
+      guidance that σ₀ "should be about 1/4th of the search domain width". Two settings change from
+      the earlier draft, both for protocol conformance and not for performance.
+      - `restarts=9` becomes `restarts=20`. pycma stops after 1 + `maxrestarts` runs even with
+        budget left, which would leave the ledger's 100-point curve (invariant L4) short. Each run
+        costs at least one generation of λ₀·2ᵏ evaluations, and λ₀ ≥ 10 at D ≥ 10, so 21 runs need
+        more than 2 × 10⁷ evaluations. The cap therefore cannot bind before any budget here. A check
+        with pycma 4.5.0 found that the budget, not the cap, already ended every run at the three
+        (D, B) pairs on sphere and Rastrigin.
+      - `x0` becomes a callable that draws a fresh uniform point per restart, which is the pattern
+        pycma's documentation recommends ("to restart from different points (recommended), pass
+        `x0` as a callable"). With a fixed array, every restart would begin at the same point.
+    - *Adapter pitfall, verified.* With restarts, `fmin2` returns the best of the last run only.
+      One test returned f = 2.7 × 10⁴ while the best over all runs was 4.6 × 10⁻¹⁶. Results MUST
+      come from the ledger (L5), which already holds.
 - **Alternatives considered.**
   - *mealpy's GA, PSO and GWO.* Rejected. They would break baseline identity with the CA paper, and
     mealpy's GA is a different variant.
   - *Plain CMA-ES without restarts.* Rejected as a straw man at these budgets.
+  - *Run both plain and IPOP CMA-ES.* Rejected. Plain CMA-ES would be a known-weaker duplicate of
+    the same family. It adds nothing to Principle III and would grow every Holm family and the
+    compute bill. The footnote above covers the cross-paper link without an extra comparator.
   - *pyade for L-SHADE.* Unavailable. The sibling verified the repository is gone.
 
 ## R9. CA as the SHOULD comparator
@@ -627,9 +666,24 @@ used:
   2005, *IEEE Trans. SMC-B* 35(6)). There, a particle that is better than its parent in the
   hierarchy swaps places with it. That is a local, pairwise, fitness-triggered swap of structural
   positions, which is exactly this mechanism's operator.
-- **Status.** The owner must add this to `mechanism-map.md` and verify the reference before the
-  implement phase. It is recorded as an open G1 item in plan.md. This planning phase does not change
-  the spec artefacts.
+- **Status: resolved (2026-09-25).** The citation was added to `mechanism-map.md`.
+  - *Reference verified on Crossref:* S. Janson and M. Middendorf, "A hierarchical particle swarm
+    optimizer and its adaptive variant", *IEEE Trans. Syst., Man, Cybern. B*, 35(6):1272–1282,
+    2005, doi:10.1109/TSMCB.2005.850530 (299 citing works). Its precursor is Janson & Middendorf,
+    IEEE CEC 2003, doi:10.1109/CEC.2003.1299745.
+  - *Mechanism verified.* The abstract says the particles sit in a dynamic hierarchy that defines
+    the neighbourhood, and "depending on the quality of their so-far best-found solution, the
+    particles move up or down the hierarchy". The swap rule was confirmed from an independent
+    implementation that cites the paper (MAOS, `HierarchicalTopology.java`: when a child's best
+    beats its parent's, the two "swap their places within the hierarchy"). The full text was not
+    reachable from this environment, so the exact order of the comparisons inside the paper should
+    be read before submission.
+  - *Fit.* The fit is good on every defining feature: pairwise, fitness-triggered and restricted to
+    adjacent nodes of the interaction structure, and the structural position determines influence
+    or role. The differences go in the manuscript's stated-difference column, not the family
+    column. H-PSO uses a tree, swaps every iteration, and compares personal bests. TFO uses a
+    lines × lanes lattice, swaps only at fixture boundaries, and each swap changes the agent's
+    archetype.
 
 ## R22. Implementation performance goals
 
@@ -655,10 +709,13 @@ used:
 - Alba, E., & Dorronsoro, B. (2005). The exploration/exploitation tradeoff in dynamic cellular
   genetic algorithms. *IEEE TEVC*, 9(2).
 - Auger, A., & Hansen, N. (2005). A restart CMA evolution strategy with increasing population
-  size. *IEEE CEC 2005*.
+  size. *IEEE CEC 2005*, 2, 1769–1776. doi:10.1109/CEC.2005.1554902 (verified on Crossref,
+  2026-09-25).
 - Awad, N. H., Ali, M. Z., Liang, J. J., Qu, B. Y., & Suganthan, P. N. (2016). Problem definitions
   and evaluation criteria for the CEC 2017 special session on single objective real-parameter
-  numerical optimization. Technical report.
+  numerical optimization. Technical report. (MaxFES verified against the primary PDF, 2026-09-25.
+  That PDF, "final version updated", modified 15 Oct 2016, lists the authors in the order Awad, Ali,
+  Suganthan, Liang, Qu. Cite the author order of the version actually used.)
 - Benavoli, A., Corani, G., & Mangili, F. (2016). Should we really use post-hoc tests based on
   mean-ranks? *JMLR*, 17.
 - Demšar, J. (2006). Statistical comparisons of classifiers over multiple data sets. *JMLR*, 7.
@@ -668,10 +725,12 @@ used:
   evolutionary algorithms for regular lattices. *IEEE TEVC*, 9(5).
 - Holm, S. (1979). A simple sequentially rejective multiple test procedure. *Scand. J. Statist.*, 6.
 - Janson, S., & Middendorf, M. (2005). A hierarchical particle swarm optimizer and its adaptive
-  variant. *IEEE Trans. SMC-B*, 35(6).
+  variant. *IEEE Trans. SMC-B*, 35(6), 1272–1282. doi:10.1109/TSMCB.2005.850530 (verified on
+  Crossref, 2026-09-25).
 - Kumar, A., Price, K. V., Mohamed, A. W., Hadi, A. A., & Suganthan, P. N. (2021). Problem
   definitions and evaluation criteria for the CEC 2022 special session and competition on single
-  objective bound constrained numerical optimization. Technical report.
+  objective bound constrained numerical optimization. Technical report, NTU Singapore, December
+  2021. (Authors and MaxFES verified against the primary PDF, 2026-09-25.)
 - López-Ibáñez, M., et al. (2016). The irace package: Iterated racing for automatic algorithm
   configuration. *Operations Research Perspectives*, 3.
 - Pratt, J. W. (1959). Remarks on zeros and ties in the Wilcoxon signed rank procedures. *JASA*, 54.

@@ -445,7 +445,10 @@ refuted target is published as a finding, not hidden.*
   name alongside the Chess Algorithm.
 - **Budget.** The evaluation budget is matched across algorithms, not iterations (a deliberate
   tightening relative to CA's iteration-matched protocol). The default is the suite's official
-  maximum (10,000 × D evaluations for CEC suites). If compute limits force a reduction, one reduced
+  maximum as each suite's own technical report states it. For CEC-2017 that is MaxFES = 10,000 × D
+  (Awad et al., 2016). CEC-2022 fixes a value per dimension instead of a 10,000 × D rule: 200,000 at
+  D = 10 and 1,000,000 at D = 20 (Kumar et al., 2021). The engineering suite has no official figure,
+  so the CEC-2017 rule is carried over and declared. If compute limits force a reduction, one reduced
   budget is applied uniformly to every algorithm, declared in the paper, and budget-aware baselines
   (L-SHADE's population-reduction schedule) are configured to the actual budget.
 - **Population.** TFO and the classical baselines use a population of 30 by default (the sibling's

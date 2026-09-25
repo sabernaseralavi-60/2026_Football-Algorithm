@@ -107,10 +107,10 @@ command-line experiment scripts (`scripts/`) [R2].
 **Constraints**:
 
 - **Budgets.** Every algorithm in a cell gets the identical, exact evaluation budget. The budgets
-  are the official maxima [R5]:
+  are each suite's own official MaxFES, verified against the technical reports [R5]:
   - CEC-2017: 10,000·D, which is 300,000 at D = 30.
-  - CEC-2022: 200,000 at D = 10 and 1,000,000 at D = 20.
-  - Engineering: 10,000·D.
+  - CEC-2022: 200,000 at D = 10 and 1,000,000 at D = 20 (fixed per dimension, not 10,000·D).
+  - Engineering: 10,000·D (no official figure; the CEC-2017 rule is carried over and declared).
 
   A uniform reduction from a pre-committed list is allowed only if the pilot shows it is needed.
 - **Information parity** is enforced by type, through the `ProblemView` capability (FR-031).
@@ -148,7 +148,7 @@ phase. The real tensions are recorded in Complexity Tracking below.
 
 ### Principles
 
-**I. Operator-Family Grounding (NON-NEGOTIABLE) — PASS, with one open G1 item.**
+**I. Operator-Family Grounding (NON-NEGOTIABLE) — PASS.**
 
 - Each of the 19 mechanisms maps one-to-one to a named module: `tfo/archetypes/<archetype>.py`,
   `tfo/tactics/<tactic>.py`, or `tfo/manager.py`.
@@ -158,8 +158,8 @@ phase. The real tensions are recorded in Complexity Tracking below.
   metaphor-free description.
 - The registry (tag → module → family → citation) is the single source for the manuscript's
   operator-family table and the CA overlap audit, so the table cannot drift from the code.
-- **Open item:** positional rotation has no canonical citation. research.md R21 proposes Janson and
-  Middendorf's H-PSO (2005), which the owner must add.
+- **Resolved:** positional rotation now cites Janson and Middendorf's H-PSO (2005), verified on
+  Crossref (research.md R21).
 
 **II. Ablation-Justified Complexity — PASS** (see Complexity rows 1 and 2).
 
@@ -234,7 +234,7 @@ phase. The real tensions are recorded in Complexity Tracking below.
 
 | Gate | When it applies | How the plan satisfies it | Status at plan time |
 |---|---|---|---|
-| G1 Mechanism map complete | before `/speckit-implement` | Families: 19 of 19. Operator statements without metaphor: mechanism-interface.md §2, to be expanded into full equations by the first implementation task. Citations: 18 of 19. | **OPEN**: rotation citation (R21) |
+| G1 Mechanism map complete | before `/speckit-implement` | Families: 19 of 19. Operator statements without metaphor: mechanism-interface.md §2, to be expanded into full equations by the first implementation task. Citations: 19 of 19 (rotation added, R21). | Design PASS |
 | G2 Switchability | before any benchmark run | `enable` flags and neutral defaults; `tests/integration/test_switchability.py` | Design PASS |
 | G3 Tuning frozen | before any test-suite run | `scripts/tune.py` on the tuning set; `config/tfo_frozen.toml` plus tag `tfo-frozen-v1`; the runner's hash guard (`ConfigNotFrozenError`) | Design PASS |
 | G4 Hypotheses pre-registered | before any test-suite run | H1 to H5 were committed in spec.md (commit `770f41b`). The operational plan in `config/protocol.toml` is tagged `prereg-v1`, and the runner requires the tag. | Design PASS |
@@ -374,14 +374,15 @@ when the manuscript work begins.
 
 ## Open items (owner action before `/speckit-implement`)
 
-1. **G1: rotation citation.** Add Janson and Middendorf (2005), H-PSO dynamic hierarchy, to the
-   positional-rotation row of `mechanism-map.md`, or name another canonical source (R21).
-2. **Spec discrepancy: CEC-2022 budget.** The spec's Assumptions give "10,000 × D" as an example of
-   the official maximum. For CEC-2022 the official figures are 200,000 at D = 10 and 1,000,000 at
-   D = 20. This plan follows the operative rule, "official maximum" (R5). The owner should confirm,
-   and the figures must be checked against the CEC-2022 report before `protocol.toml` is committed.
-3. **CMA-ES variant.** This plan uses IPOP-CMA-ES as the strongest standard deployment at these
-   budgets (R8). It departs from the sibling's plain CMA-ES and should be acknowledged by the owner.
+1. ~~**G1: rotation citation.**~~ **Resolved 2026-09-25.** Janson and Middendorf (2005) was
+   verified on Crossref and added to `mechanism-map.md` (R21).
+2. ~~**Spec discrepancy: CEC-2022 budget.**~~ **Resolved 2026-09-25.** The MaxFES figures were
+   verified against the primary reports: CEC-2017 is 10,000·D, and CEC-2022 is 200,000 at D = 10
+   and 1,000,000 at D = 20. The spec's Assumptions now state each suite's own rule (R5).
+3. ~~**CMA-ES variant.**~~ **Resolved 2026-09-25.** IPOP-CMA-ES is kept as the sole CMA-ES. There
+   are two conformance fixes: `restarts=20` so that the budget, not the restart cap, ends every run,
+   and a fresh `x0` for each restart. The manuscript footnotes the difference from the sibling's
+   plain CMA-ES (R8).
 4. **Validated CEC-2022 cell count.** The sibling's figure of 16 cells refers to opfunu at a
    15,000-evaluation budget. TFO's count will come from its own audit, with the cross-validation
    stage the sibling lacked, and may differ.
