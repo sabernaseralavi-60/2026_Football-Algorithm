@@ -1,0 +1,30 @@
+# Exact pins for the reference environment (plan.md "Primary Dependencies", research.md's
+# "Measured" environment note). This file pins the FULL programme's dependency set; only the
+# numpy/pytest/hypothesis pins are exercised by this implementation pass (see
+# specs/001-football-algorithm/tasks.md scope: T001-T064, T109-T116). The benchmark-suite and
+# baseline-adapter pins below are recorded now, per T003, so the frozen set is committed before
+# that later phase begins, but nothing in `src/tfo/` or `src/tfo_bench/` imports them yet.
+#
+# Python: CPython 3.11 (measured: 3.11.15)
+
+# --- Core (tfo's only runtime dependency) ---
+numpy==2.4.6
+
+# --- Harness (tfo_bench; not imported by tfo) ---
+scipy==1.17.1
+pandas==3.0.6
+matplotlib==3.11.2
+
+# --- Benchmark suites (out of scope for this pass; §2.5+, T065 onward) ---
+# cec2017-py (tilleyd) @ git commit 424a9fa2757914c3e4cfdd8f59a268b1aeb3197f
+git+https://github.com/tilleyd/cec2017-py.git@424a9fa2757914c3e4cfdd8f59a268b1aeb3197f#egg=cec2017-py
+opfunu==1.0.4
+
+# --- Baseline adapters (out of scope for this pass; §2.5+, T089-T108) ---
+niapy==2.7.1
+cma==4.5.0
+# mealpy is pinned separately in requirements-nodeps.txt (installed --no-deps; research.md R1)
+
+# --- Tests ---
+pytest==9.1.1
+hypothesis==6.168.1

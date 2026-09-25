@@ -1,0 +1,7 @@
+# Installed with: pip install --no-deps -r requirements-nodeps.txt
+#
+# mealpy's own dependency metadata breaks on Python 3.11+ (research.md R1), so it must be
+# installed without letting pip resolve its declared dependencies. Out of scope for this
+# implementation pass (WOAAdapter, §2.5+, T089 onward) — pinned now per T004 so the frozen
+# dependency set is complete and committed ahead of that phase.
+mealpy==3.0.3

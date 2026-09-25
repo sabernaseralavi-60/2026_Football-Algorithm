@@ -1,0 +1,6 @@
+# FR-040 tuning set: functions, dimensions {15, 40}, shift/rotation seeds, disjoint from the test
+# suites by construction (research.md R13; constitution gate G3; data-model.md B3).
+#
+# To be populated in a later implementation pass, when `scripts/tune.py` and the tuning-set
+# problems (`src/tfo_bench/problems/tuning.py`) are built (tasks.md §2.5 onward). Placeholder only
+# for this pass.

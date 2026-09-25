@@ -1,2 +1,16 @@
 # Publisher-copyrighted reference PDFs (kept locally for review, not distributed)
 *.pdf
+
+# Python
+.venv/
+__pycache__/
+*.py[cod]
+*.egg-info/
+build/
+dist/
+.pytest_cache/
+.hypothesis/
+
+# Smoke-test results are throwaway; the rest of results/ is tracked (data-model.md, plan.md)
+results/_smoke/
+

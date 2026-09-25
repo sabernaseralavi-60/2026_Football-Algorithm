@@ -1,0 +1,9 @@
+# Pre-registration protocol (research.md R5, R11, R12; constitution gates G4, G6).
+#
+# To be populated in a later implementation pass with: budgets per suite/cell, number of runs,
+# master seed(s) for CRN derivation (research.md R11), the algorithm roster, the statistical plan
+# (error floor, Wilcoxon + Holm family, zero-handling, direction rule), the non-discriminative (ND)
+# cell rule, audit tolerances, and the measured compute envelope. Tagged `prereg-v1` once frozen.
+#
+# Out of scope for this pass (tasks.md §2.5 onward, T065-T108): the runner that enforces this file
+# does not exist yet in this pass, so this file is a placeholder only.

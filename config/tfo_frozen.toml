@@ -1,0 +1,7 @@
+# Written by `scripts/tune.py` on the disjoint tuning set (research.md R13), committed, and tagged
+# `tfo-frozen-v1` (constitution gate G3). The test-suite runner refuses to run against any
+# `TFOConfig` whose `config_hash` differs from this file's.
+#
+# `scripts/tune.py` and the tuning pipeline are out of scope for this pass (tasks.md §2.5 onward).
+# Until tuning happens, `config/tfo_defaults.toml` (provisional defaults, data-model.md A15) is the
+# only frozen-shaped configuration this pass ships, and it is NOT tagged `tfo-frozen-v1`.

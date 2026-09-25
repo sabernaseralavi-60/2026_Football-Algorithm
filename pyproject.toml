@@ -1,0 +1,43 @@
+[build-system]
+requires = ["setuptools>=68.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "tfo-research"
+version = "0.1.0"
+description = "Total Football Optimizer (TFO): mechanism design and evaluation programme"
+requires-python = ">=3.11"
+readme = "README.md"
+license = { text = "MIT" }
+
+# tfo's own runtime dependency set is numpy only (plan.md Primary Dependencies,
+# T064: `src/tfo/` must import cleanly with only numpy on the path).
+dependencies = [
+    "numpy",
+]
+
+[project.optional-dependencies]
+# tfo_bench (the benchmark harness) needs the wider scientific stack. This is
+# never imported from `tfo` itself.
+bench = [
+    "scipy",
+    "pandas",
+    "matplotlib",
+]
+dev = [
+    "pytest",
+    "hypothesis",
+]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+include = ["tfo*", "tfo_bench*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+markers = [
+    "unit: fast, isolated unit tests of a single module",
+    "contract: cross-cutting contract tests (adapters, ledger, schema, parity)",
+    "integration: multi-module integration tests (switchability, smoke, reproducibility)",
+    "golden: fixture-comparison tests against known reference values",
+]
