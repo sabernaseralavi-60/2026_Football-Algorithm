@@ -44,7 +44,7 @@ def main() -> int:
     )
     parser.add_argument("--runs", type=int, default=30)
     parser.add_argument("--budget", type=int, default=None, help="override; default: protocol.toml's")
-    parser.add_argument("--out", default=str(REPO_ROOT / "results" / "raw"))
+    parser.add_argument("--out", default=str(REPO_ROOT / "results"))
     parser.add_argument("--smoke", action="store_true", help="tiny budget/run-count smoke run")
     parser.add_argument("--part", default=None, help="'i/n': only this 1-indexed slice of functions")
     parser.add_argument("--workers", type=int, default=1)
@@ -69,7 +69,7 @@ def main() -> int:
     else:
         n_runs = args.runs
         budget = args.budget or _protocol_budget(protocol, args.suite, dim, function_ids)
-        out_root = Path(args.out)
+        out_root = Path(args.out) / "raw"
         runner.check_roster_includes_tfo_static_with_tfo(args.algorithms)
         for algorithm in args.algorithms:
             runner.check_preregistered(experiment, runner.get_git_tags(REPO_ROOT))
