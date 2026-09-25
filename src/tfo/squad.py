@@ -94,6 +94,10 @@ class Squad:
     def d(self) -> int:
         return self.X.shape[1]
 
+    @property
+    def n_out(self) -> int:
+        return self.n - 1
+
     @classmethod
     def initialize(
         cls,
