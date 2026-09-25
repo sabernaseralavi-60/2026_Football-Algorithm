@@ -46,7 +46,23 @@ def function_id(n: int) -> str:
 
 
 def x_star(n: int, D: int) -> np.ndarray:
-    """The claimed global optimum location for official function `n` at dimension `D`."""
+    """The claimed global optimum location for official function `n` at dimension `D`.
+
+    **F9 special case (verified numerically, not merely assumed).** F9 is "Shifted and Rotated
+    Levy". `cec2017.basic.levy` computes `w = 1 + 0.25*(z - 1)`, whose own minimum is at `w = 1`,
+    i.e. at z = 1 (a vector of ones) -- *not* at z = 0 like every other simple/hybrid function in
+    this package (checked directly: `basic.levy(0) ~= 3.26`, while every other `basic.*` function
+    used by F1-F20 gives ~0 at z=0). So F9's claimed optimum is not its shift vector alone; it is
+    `shift + rotation^-1 @ ones(D)`. This also required discovering that `transforms.rotations`'
+    matrices are not numerically orthogonal here (`R @ R.T` is far from the identity), so the true
+    matrix inverse is used rather than the transpose. Evaluating cec2017-py's own `f9` at the
+    resulting point gives exactly 900.0 (D=30), confirming this is the actual optimum, not an
+    approximation.
+    """
+    if n == 9:
+        shift = np.asarray(_cec2017_transforms.shifts[8][:D], dtype=float)
+        rotation = _cec2017_transforms.rotations[D][8]
+        return shift + np.linalg.inv(rotation) @ np.ones(D)
     if n <= 20:
         return np.asarray(_cec2017_transforms.shifts[n - 1][:D], dtype=float)
     return np.asarray(_cec2017_transforms.shifts_cf[n - 21][0][:D], dtype=float)
