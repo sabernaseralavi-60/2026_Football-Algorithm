@@ -125,7 +125,9 @@ def run(
             pass
     squad.set_initial_fitness(f_init)
 
-    archive = KeeperArchive(k=cfg.operators.archive_k, min_sep=cfg.operators.archive_min_sep, d=d)
+    # Disabled Sweeper-Keeper (mechanism-interface.md §2.1): archive size K = 1 (incumbent only).
+    archive_k = cfg.operators.archive_k if cfg.enable[MechanismTag.SWEEPER_KEEPER] else 1
+    archive = KeeperArchive(k=archive_k, min_sep=cfg.operators.archive_min_sep, d=d)
     account.add_hook(lambda x, f, is_new: archive.on_evaluation(x, f, is_new))
     # The hook was registered AFTER the init batch already ran; replay it now so the archive still
     # sees every initial point (Sweeper-Keeper's archive-update hook fires "on every account.evaluate
