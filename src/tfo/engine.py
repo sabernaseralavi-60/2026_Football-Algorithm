@@ -334,7 +334,19 @@ def run(
             clock.tick_iteration()
             iteration += 1
     except BudgetExhausted:
-        pass
+        # Bug fix (found via tests/integration/test_switchability.py while building tfo_bench):
+        # the budget can be exhausted partway through an iteration's body (steps 1-8), before
+        # step 9's `trace.record_iteration` call is reached. Without this, the trace's last
+        # segment stops at the previous iteration's `eval_end`, short of `account.evals_used` by
+        # however many evaluations the interrupted iteration made -- violating
+        # results-schema.md §5 ("segments ... together cover every iteration") and this
+        # project's own contract that a run's last tactical segment reaches the run's true
+        # evals_used. Flushing the (possibly partial) current iteration here with the account's
+        # actual evals_used closes that gap; it is a no-op when the loop instead exits normally
+        # (evals_used == budget without an exception), since that path already records every
+        # iteration via step 9.
+        state_name = manager.state.value if manager is not None else "CONTROL"
+        trace.record_iteration(state_name, iteration, account.evals_used)
 
     trace.finalize_mechanism_evals(account.evals_by_tag)
     return account, trace, ctx

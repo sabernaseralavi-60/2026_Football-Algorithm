@@ -1,9 +1,117 @@
-# Pre-registration protocol (research.md R5, R11, R12; constitution gates G4, G6).
+# Pre-registration protocol (T099; research.md R5, R11, R12; constitution gates G4, G6).
 #
-# To be populated in a later implementation pass with: budgets per suite/cell, number of runs,
-# master seed(s) for CRN derivation (research.md R11), the algorithm roster, the statistical plan
-# (error floor, Wilcoxon + Holm family, zero-handling, direction rule), the non-discriminative (ND)
-# cell rule, audit tolerances, and the measured compute envelope. Tagged `prereg-v1` once frozen.
-#
-# Out of scope for this pass (tasks.md §2.5 onward, T065-T108): the runner that enforces this file
-# does not exist yet in this pass, so this file is a placeholder only.
+# Committed before any non-smoke test-suite run, per constitution gate G4 ("Hypotheses
+# pre-registered: expected wins and expected losses are committed before test-suite runs").
+# Tagged `prereg-v1` in the same commit that freezes this file (see T101).
+
+schema_version = 1
+
+# ---------------------------------------------------------------------------------------
+# Master seeds (research.md R11). A separate, disjoint master seed is used for the tuning
+# set (config/tuning_set.toml / src/tfo_bench/problems/tuning.py's TUNING_MASTER_SEED),
+# so no test-suite seed can ever coincide with a tuning-set seed.
+# ---------------------------------------------------------------------------------------
+[seeds]
+master_seed = 20260925          # test suites (cec2017, cec2022, engineering)
+tuning_master_seed = 0x7F0BA11  # matches tfo_bench.problems.tuning.TUNING_MASTER_SEED
+
+# ---------------------------------------------------------------------------------------
+# Budgets (research.md R5): the official maxima, checked against the organisers' primary
+# PDFs (see research.md R5's citation). `n_runs` >= 30 per FR-030.
+# ---------------------------------------------------------------------------------------
+[budgets]
+n_runs = 30
+
+[budgets.cec2017]
+d30 = 300000  # 10,000 * D
+
+[budgets.cec2022]
+d10 = 200000
+d20 = 1000000
+
+[budgets.engineering]
+# 10,000 * D per problem (no official figure for this suite; the CEC rule is carried over,
+# research.md R5). D per problem: WeldedBeam=4, Spring=3, PressureVessel=4, SpeedReducer=7,
+# ThreeBarTruss=2, GearTrain=4, CantileverBeam=5.
+WeldedBeam = 40000
+Spring = 30000
+PressureVessel = 40000
+SpeedReducer = 70000
+ThreeBarTruss = 20000
+GearTrain = 40000
+CantileverBeam = 50000
+
+# ---------------------------------------------------------------------------------------
+# Compute envelope and the pre-committed reduction schedule (research.md R5). The pilot
+# (scripts/pilot.py) measures actual per-evaluation cost and projects total core-hours;
+# only if that projection exceeds `envelope_core_hours` does a reduction apply, and only
+# one multiplier from `allowed_reduction_multipliers`, identically to every algorithm.
+# ---------------------------------------------------------------------------------------
+[compute_envelope]
+envelope_core_hours = 500.0
+allowed_reduction_multipliers = [0.5, 0.25]
+
+# ---------------------------------------------------------------------------------------
+# The 9-algorithm roster (optimizer-interface.md §2; research.md R8, R9).
+# ---------------------------------------------------------------------------------------
+[roster]
+algorithms = [
+    "TFO", "TFO-static", "CA", "GA", "PSO", "GWO", "WOA", "L-SHADE", "CMA-ES (IPOP)",
+]
+
+# ---------------------------------------------------------------------------------------
+# Statistics plan (research.md R12; verbatim decisions, committed before any test run).
+# ---------------------------------------------------------------------------------------
+[statistics]
+error_floor = 1e-8
+alpha = 0.05
+pairwise_test = "wilcoxon_signed_rank"
+zero_method = "pratt"
+scipy_method = "auto"
+correction = "holm"
+holm_family = "all_C_k_2_pairs_per_cell"  # 36 pairs for 9 algorithms
+suite_level_test = "friedman_mean_ranks"
+robustness_check = "mann_whitney_ranksums"
+# research.md R12.5: "A cell is non-discriminative if none of its C(k, 2) pairwise tests is
+# significant after Holm correction."
+non_discriminative_rule = "no_pairwise_test_significant_after_holm"
+
+# ---------------------------------------------------------------------------------------
+# Audit tolerances (research.md R12 item 6; constitution Principle V).
+# ---------------------------------------------------------------------------------------
+[audit]
+preflight_relative_tolerance = 1e-6      # |f(x*) - f*| <= tol * max(1, |f*|)
+below_optimum_relative_tolerance = 1e-6  # fails if best_f < f* - tol * max(1, |f*|)
+# research.md R12 item 6: composition functions are evaluated off the exact shift point to
+# avoid the distance-weight singularity; this implementation found (see
+# tfo_bench.problems.cec2017 and tfo_bench.audit.run_preflight's docstrings) that a
+# decreasing backoff sequence is needed rather than a single literal 1e-6 offset.
+composition_epsilon_backoff = [1e-6, 1e-8, 1e-10, 1e-12, 1e-14]
+
+# ---------------------------------------------------------------------------------------
+# Pre-registered hypotheses (spec.md's Assumptions, verbatim; constitution gate G4).
+# ---------------------------------------------------------------------------------------
+[[hypotheses]]
+id = "H1"
+criteria = ["SC-011", "SC-012"]
+statement = "TFO is the best of the classical/moderate group on all three suites."
+
+[[hypotheses]]
+id = "H2"
+criteria = ["SC-013"]
+statement = "TFO beats TFO-static overall."
+
+[[hypotheses]]
+id = "H3"
+criteria = ["SC-014"]
+statement = "The formation topology behaves as structured-population theory predicts."
+
+[[hypotheses]]
+id = "H4"
+criteria = []
+statement = "(expected loss) L-SHADE and CMA-ES outrank TFO on most functions of every suite."
+
+[[hypotheses]]
+id = "H5"
+criteria = []
+statement = """(expected loss niche) Because a structured population slows takeover, TFO converges more slowly than panmictic baselines on unimodal CEC-2017 functions; following CA's finding, measured contribution is expected to concentrate in the local-refinement (Virtuoso, set pieces) and differential (Box-to-Box) families."""

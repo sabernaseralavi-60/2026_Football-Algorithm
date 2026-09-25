@@ -1,7 +1,134 @@
-# Written by `scripts/tune.py` on the disjoint tuning set (research.md R13), committed, and tagged
-# `tfo-frozen-v1` (constitution gate G3). The test-suite runner refuses to run against any
-# `TFOConfig` whose `config_hash` differs from this file's.
-#
-# `scripts/tune.py` and the tuning pipeline are out of scope for this pass (tasks.md §2.5 onward).
-# Until tuning happens, `config/tfo_defaults.toml` (provisional defaults, data-model.md A15) is the
-# only frozen-shaped configuration this pass ships, and it is NOT tagged `tfo-frozen-v1`.
+# Written by scripts/tune.py (T100; research.md R13). SMOKE-SCALE tuning only (n_runs=3, budget=500, dim=15, 2 of 7 tuning functions): this is NOT the pre-registered full protocol of research.md R13. It exercises the tuning mechanism end to end but the numeric values below are placeholders, not the frozen values gate G3 requires for a real test-suite run. measured_ca_omega=0.2172
+
+[enable]
+sweeper_keeper = true
+zonal_centre_back = true
+overlapping_wing_back = true
+deep_lying_playmaker = true
+box_to_box = true
+destroyer = true
+virtuoso = true
+finisher = true
+formation = true
+rotation = true
+possession = true
+pressing = true
+counter_attack = true
+set_pieces = true
+offside = true
+substitutions = true
+fatigue = true
+var_review = true
+manager = true
+
+[squad]
+n = 30
+
+[squad.role_counts]
+ZONAL_CENTRE_BACK = 4
+OVERLAPPING_WING_BACK = 4
+DEEP_LYING_PLAYMAKER = 3
+BOX_TO_BOX = 6
+DESTROYER = 3
+VIRTUOSO = 5
+FINISHER = 4
+
+[states]
+
+[states.BUILD_UP]
+formation = "balanced"
+rho = 0.05
+tau = 0.01
+chain_length = 5
+substitution_cap_increment = 0
+
+[states.BUILD_UP.rate_multipliers]
+
+[states.CONTROL]
+formation = "balanced"
+rho = 0.1
+tau = 0.001
+chain_length = 5
+substitution_cap_increment = 0
+
+[states.CONTROL.rate_multipliers]
+
+[states.HIGH_PRESS]
+formation = "compact"
+rho = 0.3
+tau = 0.0
+chain_length = 10
+substitution_cap_increment = 0
+
+[states.HIGH_PRESS.rate_multipliers]
+virtuoso = 1.5
+finisher = 1.5
+
+[states.CHASING]
+formation = "stretched"
+rho = 0.0
+tau = 0.01
+chain_length = 2
+substitution_cap_increment = 2
+
+[states.CHASING.rate_multipliers]
+overlapping_wing_back = 2.0
+deep_lying_playmaker = 2.0
+
+[manager]
+ema_alpha_div = 0.1
+ema_alpha_poss = 0.1
+d_low_enter = 0.05
+d_low_exit = 0.08
+d_high_enter = 0.35
+d_high_exit = 0.3
+p_high_enter = 0.6
+p_high_exit = 0.5
+g_max = 50
+delta_mat = 0.0001
+t_press = 0.2
+t_late = 0.1
+dwell_min = 10
+
+[operators]
+blx_alpha = 0.5
+de_f = 0.5
+de_cr = 0.9
+jump_rate = 0.3
+levy_beta = 1.5
+levy_sigma = 0.01
+finisher_fail_limit = 10
+mesh_h_min = 1e-06
+mesh_h_max = 0.1
+mesh_h_init = 0.01
+mesh_k = 2
+niche_radius = 0.01
+neutral_sigma = 0.1
+counter_attack_delta_mat = 0.0001
+counter_attack_d_trans = 0.2
+burst_len = 5
+burst_gamma = 0.5
+burst_s0 = 0.1
+set_piece_period = 25
+set_piece_h = 0.05
+neutral_pass_max = 5
+lost_streak_max = 3
+var_review_period = 10
+tabu_radius = 0.02
+tabu_max = 20
+collision_radius = 0.001
+fatigue_kappa = 0.05
+fatigue_r0 = 0.5
+stamina_min = 0.2
+stamina_sub_threshold = 0.4
+substitution_cap = 5
+substitution_window = 50
+archive_k = 5
+archive_min_sep = 0.05
+n_fixtures = 20
+
+[constraints]
+eps0 = 1.0
+t_c = 0.8
+cp = 5.0
+

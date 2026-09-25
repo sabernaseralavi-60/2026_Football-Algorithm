@@ -1,0 +1,19 @@
+{
+  "measured_cost_per_eval_s": {
+    "TFO": 0.00012713791333226253,
+    "TFO-static": 0.00012163095333259358,
+    "CA": 2.1529333334910916e-05,
+    "GA": 8.690780002022317e-06,
+    "PSO": 3.6518800000825044e-06,
+    "GWO": 3.796713332728056e-06,
+    "WOA": 0.00010641395666728689,
+    "L-SHADE": 0.00031530227999913526,
+    "CMA-ES (IPOP)": 0.00014576887666711022
+  },
+  "mean_cost_per_eval_s": 9.488029851868137e-05,
+  "total_planned_evaluations": 6315300000,
+  "projected_core_hours_at_full_budget": 166.4437636763968,
+  "envelope_core_hours": 500.0,
+  "chosen_reduction_multiplier": 1.0,
+  "measurement_note": "Costs measured on tuning/Sphere at D=15, budget=300; this is a sizing measurement, not a benchmark result."
+}
