@@ -1,0 +1,8 @@
+# Provisional defaults + tuning candidate grids (data-model.md A15; research.md R13).
+#
+# The provisional *(prov.)* defaults themselves are implemented directly as the Python field
+# defaults of `src/tfo/config.py`'s dataclasses (`TFOConfig()` with no arguments reproduces them
+# exactly), since `tfo.minimize(..., config=None)` must fall back to packaged defaults without
+# reading any file outside the installed package (optimizer-interface.md §1, T064's standalone-
+# import requirement). This file is the human-readable TOML mirror plus the tuning candidate grids
+# scripts/tune.py will read; it is not implemented in this pass (tasks.md §2.5 onward).
