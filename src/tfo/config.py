@@ -130,6 +130,7 @@ class OperatorConfig:
     substitution_window: int = 50  # W, stagnation window (prov.)
     archive_k: int = 5  # KeeperArchive size K (prov.)
     archive_min_sep: float = 0.05  # min_sep (prov.)
+    n_fixtures: int = 20  # data-model.md A7 (prov.)
 
 
 @dataclass(frozen=True)

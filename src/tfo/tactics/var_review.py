@@ -26,11 +26,13 @@ def _fails_review(i: int, squad, tabu, collision_radius: float) -> bool:
     return False
 
 
-def apply(ctx) -> None:
+def apply(ctx) -> int:
+    """Runs the review; returns the number of agents rolled back."""
     squad = ctx.squad
     tabu = ctx.tabu
     collision_radius = ctx.cfg.operators.collision_radius
 
+    n_rollbacks = 0
     n = squad.X.shape[0]
     for i in range(n):
         if not squad.moved_since_rev[i]:
@@ -39,5 +41,7 @@ def apply(ctx) -> None:
             continue  # aspiration: a move that set a new best is always kept
         if _fails_review(i, squad, tabu, collision_radius):
             squad.rollback(i)
+            n_rollbacks += 1
 
     squad.refresh_review_snapshot()
+    return n_rollbacks
