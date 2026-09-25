@@ -7,7 +7,6 @@ donors.
 
 from __future__ import annotations
 
-import math
 from collections import deque
 from dataclasses import dataclass
 
@@ -19,6 +18,37 @@ SHAPES_N30: dict[str, tuple[int, int]] = {
     "balanced": (3, 10),
     "stretched": (2, 15),
 }
+
+
+#: Offsets of the von Neumann (NEWS / "L5") neighbourhood, centre included.
+_VON_NEUMANN_L5: tuple[tuple[int, int], ...] = ((0, 0), (-1, 0), (1, 0), (0, -1), (0, 1))
+
+
+def dispersion_radius(points: np.ndarray) -> float:
+    """Radius of a set of 2-D cells: root-mean-square distance to their centroid,
+
+        rad = sqrt( sum_i [(x_i - x_bar)^2 + (y_i - y_bar)^2] / n ).
+
+    This is the dispersion measure of Sarma & De Jong (1996), used for neighbourhoods and grids
+    in cellular EAs by Alba & Troya (2000) and Alba & Dorronsoro (2005, IEEE TEVC 9(2):126-142,
+    doi:10.1109/TEVC.2005.843751).
+    """
+    pts = np.asarray(points, dtype=float)
+    centred = pts - pts.mean(axis=0)
+    return float(np.sqrt(np.sum(centred**2) / len(pts)))
+
+
+def cellular_ratio(lines: int, lanes: int) -> float:
+    """Alba & Dorronsoro (2005) ratio: rad(von Neumann L5 neighbourhood) / rad(lines x lanes grid).
+
+    rad(L5) = sqrt(4/5) = 0.894. For a full r x c grid the closed form is
+    rad = sqrt(((r^2 - 1) + (c^2 - 1)) / 12). The grid radius is a property of the lattice, so it
+    is taken over every cell of the lines x lanes grid, vacant slots included. The formula
+    reproduces the paper's own values for 400 cells (20x20: 0.110, 10x40: 0.075, 4x100: 0.031) and
+    data-model.md A3's values for n = 30 (5x6: 0.403, 3x10: 0.300, 2x15: 0.206).
+    """
+    grid = _row_major_coords(lines, lanes)
+    return dispersion_radius(np.array(_VON_NEUMANN_L5)) / dispersion_radius(grid)
 
 
 def _row_major_coords(lines: int, lanes: int) -> np.ndarray:
@@ -108,13 +138,7 @@ class Formation:
             neighbours = _von_neumann_neighbours_torus(lines, lanes, vacant)
             graph_dist = _bfs_graph_dist(s, neighbours, vacant)
 
-        # Neighbourhood-radius / grid-radius ratio (Alba & Dorronsoro 2005). The von Neumann
-        # neighbourhood radius is 1; the grid radius is approximated by the radius of the circle
-        # of equal area to the lines x lanes rectangle's circumscribed ellipse-like extent,
-        # R = sqrt(lines^2 + lanes^2) / pi, which reproduces data-model.md A3's three reference
-        # values (0.403, 0.300, 0.206) to within rounding.
-        grid_radius = math.sqrt(lines**2 + lanes**2) / math.pi
-        ratio = 1.0 / grid_radius
+        ratio = cellular_ratio(lines, lanes)
 
         return cls(
             name=name,

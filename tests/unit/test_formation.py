@@ -5,7 +5,7 @@ from __future__ import annotations
 import numpy as np
 import pytest
 
-from tfo.tactics.formation import SHAPES_N30, Formation
+from tfo.tactics.formation import SHAPES_N30, Formation, cellular_ratio, dispersion_radius
 
 
 @pytest.mark.parametrize("name", ["compact", "balanced", "stretched"])
@@ -30,6 +30,32 @@ def test_ratio_strictly_decreasing_compact_to_stretched():
     assert ratios[0] > ratios[1] > ratios[2], (
         "The ratio is strictly decreasing from compact to balanced to stretched"
     )
+
+
+@pytest.mark.parametrize(
+    ("name", "grid_radius", "ratio"),
+    [("compact", 2.217, 0.403), ("balanced", 2.986, 0.300), ("stretched", 4.350, 0.206)],
+)
+def test_ratio_matches_data_model_reference_values(name, grid_radius, ratio):
+    """data-model.md A3 / research.md R16: ratio = rad(L5) / rad(grid) (Alba & Dorronsoro 2005)."""
+    formation = Formation.build(name, n_out=29)
+    lines, lanes = SHAPES_N30[name]
+    rc = np.array([(r, c) for r in range(lines) for c in range(lanes)])
+    assert dispersion_radius(rc) == pytest.approx(grid_radius, abs=1e-3)
+    assert formation.ratio == pytest.approx(ratio, abs=5e-4)
+
+
+def test_neighbourhood_radius_is_sqrt_0_8():
+    l5 = np.array([(0, 0), (-1, 0), (1, 0), (0, -1), (0, 1)])
+    assert dispersion_radius(l5) == pytest.approx(np.sqrt(0.8))
+
+
+@pytest.mark.parametrize(
+    ("lines", "lanes", "ratio"), [(20, 20, 0.110), (10, 40, 0.075), (4, 100, 0.031)]
+)
+def test_ratio_reproduces_alba_dorronsoro_2005_grids(lines, lanes, ratio):
+    """The square / rectangular / narrow 400-cell grids of Alba & Dorronsoro (2005)."""
+    assert cellular_ratio(lines, lanes) == pytest.approx(ratio, abs=5e-4)
 
 
 def test_shapes_n30_dimensions_match_data_model():

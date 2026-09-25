@@ -552,7 +552,9 @@ used:
     | balanced | 3 × 10 | 2.986 | 0.300 |
     | stretched | 2 × 15 | 4.350 | 0.206 |
 
-    The von Neumann neighbourhood radius is √0.8 = 0.894. Radii follow Alba & Dorronsoro (2005).
+    The von Neumann neighbourhood radius is √0.8 = 0.894. Radii follow Alba & Dorronsoro (2005):
+    rad = √(Σᵢ [(xᵢ − x̄)² + (yᵢ − ȳ)²] / n) over all cells of the set. For the grid, that means
+    all lines × lanes cells, vacancy included (formula and check in data-model.md A3).
 
   - For other population sizes (for example, in sensitivity runs), a documented rule picks three
     shapes with minimal vacancy that span the same ordering of ratios.
@@ -707,7 +709,11 @@ used:
 ## References cited in this file
 
 - Alba, E., & Dorronsoro, B. (2005). The exploration/exploitation tradeoff in dynamic cellular
-  genetic algorithms. *IEEE TEVC*, 9(2).
+  genetic algorithms. *IEEE TEVC*, 9(2), 126–142. doi:10.1109/TEVC.2005.843751 (verified on
+  Crossref, 2026-09-25).
+- Alba, E., & Troya, J. M. (2000). Cellular evolutionary algorithms: Evaluating the influence of
+  ratio. *PPSN VI*, LNCS 1917, 29–38. doi:10.1007/3-540-45356-3_3 (verified on Crossref,
+  2026-09-25). Cited in data-model.md A3 for the ratio.
 - Auger, A., & Hansen, N. (2005). A restart CMA evolution strategy with increasing population
   size. *IEEE CEC 2005*, 2, 1769–1776. doi:10.1109/CEC.2005.1554902 (verified on Crossref,
   2026-09-25).

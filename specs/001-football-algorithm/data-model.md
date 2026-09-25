@@ -81,15 +81,25 @@ outfield agents.
 | `vacant` | bool (S,): slots with no agent |
 | `neighbours` | Ragged int table: von Neumann neighbours on the **torus**, with vacant slots skipped |
 | `graph_dist` | int (S, S): hop distance on the lattice graph, used by the Deep-Lying Playmaker |
-| `ratio` | Neighbourhood radius ÷ grid radius (Alba & Dorronsoro 2005) |
+| `ratio` | rad(neighbourhood) ÷ rad(grid) (Alba & Dorronsoro 2005; see the formula below) |
 
+- **Ratio formula.** The radius of a set of n cells is their root-mean-square distance to their
+  centroid: rad = √( Σᵢ [(xᵢ − x̄)² + (yᵢ − ȳ)²] / n ). This is the dispersion measure of Sarma &
+  De Jong (1996), used as the cellular-EA "ratio" by Alba & Troya (2000) and Alba & Dorronsoro
+  (2005, *IEEE TEVC* 9(2):126–142, doi:10.1109/TEVC.2005.843751).
+  - The neighbourhood is von Neumann (L5, centre included): rad = √(4/5) = 0.894.
+  - The grid radius is taken over **all** lines × lanes cells, vacant slots included, because it
+    is a property of the lattice. For a full r × c grid it reduces to
+    rad = √(((r² − 1) + (c² − 1)) / 12).
+  - Check: the same formula gives the paper's own 400-cell values (20 × 20: 0.110, 10 × 40: 0.075,
+    4 × 100: 0.031).
 - **Shapes for n = 30** (research.md R16):
 
-  | Shape | Lines × lanes | Ratio |
-  |---|---|---|
-  | compact | 5 × 6 | 0.403 |
-  | balanced | 3 × 10 | 0.300 |
-  | stretched | 2 × 15 | 0.206 |
+  | Shape | Lines × lanes | Grid radius | Ratio |
+  |---|---|---|---|
+  | compact | 5 × 6 | 2.217 | 0.403 |
+  | balanced | 3 × 10 | 2.986 | 0.300 |
+  | stretched | 2 × 15 | 4.350 | 0.206 |
 
   Each shape has exactly one vacancy.
 - **Fully connected mode** (the neutral default when the formation is disabled): `neighbours[i]` is
