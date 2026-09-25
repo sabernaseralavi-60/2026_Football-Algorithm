@@ -42,6 +42,14 @@ class RoleSheet:
     def n_slots(self) -> int:
         return len(self._by_slot)
 
+    def slots_of(self, archetype: Archetype) -> tuple[int, ...]:
+        """Ascending slot indices holding `archetype`."""
+        return tuple(s for s, a in enumerate(self._by_slot) if a == archetype)
+
+    def ordinal_within(self, archetype: Archetype, slot: int) -> int:
+        """This slot's 0-based rank among all slots holding `archetype` (ascending slot index)."""
+        return self.slots_of(archetype).index(slot)
+
     @classmethod
     def layout(cls, role_counts: Mapping[Archetype, int], n_slots: int) -> "RoleSheet":
         n_out = sum(role_counts.values())
