@@ -17,7 +17,9 @@ matplotlib==3.11.2
 
 # --- Benchmark suites (out of scope for this pass; §2.5+, T065 onward) ---
 # cec2017-py (tilleyd) @ git commit 424a9fa2757914c3e4cfdd8f59a268b1aeb3197f
-git+https://github.com/tilleyd/cec2017-py.git@424a9fa2757914c3e4cfdd8f59a268b1aeb3197f#egg=cec2017-py
+# Upstream's setup.py names the distribution "cec2017", not "cec2017-py"; an #egg=cec2017-py
+# fragment makes pip's post-2020 dependency resolver reject the checkout as a name mismatch.
+git+https://github.com/tilleyd/cec2017-py.git@424a9fa2757914c3e4cfdd8f59a268b1aeb3197f
 opfunu==1.0.4
 
 # --- Baseline adapters (out of scope for this pass; §2.5+, T089-T108) ---
